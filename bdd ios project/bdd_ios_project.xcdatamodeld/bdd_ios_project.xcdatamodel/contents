@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22C65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Category" representedClassName="Category" syncable="YES" codeGenerationType="class">
+        <attribute name="creationDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="modifDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <relationship name="cities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Places" inverseName="categoryLinked" inverseEntity="Places"/>
+    </entity>
+    <entity name="Coordinates" representedClassName="Coordinates" syncable="YES" codeGenerationType="class">
+        <attribute name="coordX" optional="YES" attributeType="String"/>
+        <attribute name="coordY" optional="YES" attributeType="String"/>
+        <relationship name="cityLinked" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Places" inverseName="coordinateLinked" inverseEntity="Places"/>
+    </entity>
+    <entity name="Places" representedClassName="Places" syncable="YES" codeGenerationType="class">
+        <attribute name="creationDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="descripionCity" optional="YES" attributeType="String"/>
+        <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="isFavorite" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="modificationDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <relationship name="categoryLinked" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="cities" inverseEntity="Category"/>
+        <relationship name="coordinateLinked" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Coordinates" inverseName="cityLinked" inverseEntity="Coordinates"/>
+    </entity>
+</model>
