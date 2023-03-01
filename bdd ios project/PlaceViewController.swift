@@ -22,7 +22,6 @@ class PlaceViewController: UITableViewController {
         
         title = category!.name
 
-        items = fetchItems()
         
         let searchController = UISearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
@@ -30,6 +29,13 @@ class PlaceViewController: UITableViewController {
         navigationItem.searchController = searchController
                 
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        items = fetchItems()
+        tableView.reloadData()
+    }
+    
 
     //MARK: - CoreData Methods
     
@@ -40,18 +46,20 @@ class PlaceViewController: UITableViewController {
         let titleSortDescriptor = NSSortDescriptor(keyPath: \Places.name, ascending: false)
         
         fetchRequest.sortDescriptors = [dateSortDescriptor, titleSortDescriptor]
-        
-        let predicate = NSPredicate(format: "categoryLinked = %@", category!)
-        
+//
+        let predicate = NSPredicate(format: "%K = %@",
+                                    argumentArray: [ #keyPath(Places.categoryLinked), category!])
+
         fetchRequest.predicate = predicate
         
         if let searchText, !searchText.isEmpty {
             let predicate2 = NSPredicate(format: "%K contains[cd] %@", argumentArray: [#keyPath(Places.name), searchText])
             fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, predicate2])
         }
-        
+
         do {
-            return try viewContext.fetch(fetchRequest)
+            let result = try viewContext.fetch(fetchRequest)
+            return result
         }
         catch {
             fatalError(error.localizedDescription)
@@ -82,6 +90,16 @@ class PlaceViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellPlace", for: indexPath) as! PlaceCellView
         let item = items[indexPath.row]
+
+        if(item.image != nil) {
+            DispatchQueue.main.async {
+                cell.img.image = UIImage(data: item.image!)
+            }
+        }
+        else {
+            cell.img.image = nil
+        }
+
         cell.textLabel?.text = " "
         cell.nomPlace.text = item.name
         cell.descriptionPlace.text = item.descripionCity
@@ -110,6 +128,18 @@ class PlaceViewController: UITableViewController {
     
     @IBAction func cancelButtonPress(_ sender: Any) {
         self.dismiss(animated: true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier == "addPlaceSegue") {
+            let destView = segue.destination as! AddPlaceViewController
+            destView.category = self.category
+        }
+        if(segue.identifier == "detailSegue") {
+            let destView = segue.destination as! DetailPlaceViewController
+            destView.place = items[tableView.indexPath(for: sender as! UITableViewCell)!.row]
+        }
+        
     }
 }
 

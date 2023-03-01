@@ -19,6 +19,6 @@
         <attribute name="modificationDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
         <relationship name="categoryLinked" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="cities" inverseEntity="Category"/>
-        <relationship name="coordinateLinked" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Coordinates" inverseName="cityLinked" inverseEntity="Coordinates"/>
+        <relationship name="coordinateLinked" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Coordinates" inverseName="cityLinked" inverseEntity="Coordinates"/>
     </entity>
 </model>

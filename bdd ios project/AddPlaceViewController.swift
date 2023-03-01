@@ -28,9 +28,8 @@ class AddPlaceViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
     }
+    
     @IBAction func selectImageButPress(_ sender: UIButton) {
         showPickerOption()
     }
@@ -41,8 +40,14 @@ class AddPlaceViewController: UIViewController {
         newItem.name = name.text
         newItem.creationDate = Date()
         newItem.modificationDate = Date()
+        
+        if category == nil {
+            fatalError()
+        }
+        
         newItem.categoryLinked = category
         newItem.isFavorite = false
+        newItem.descripionCity = descript.text
         
         let coordinate = Coordinates(context: viewContext)
         coordinate.coordX = coordX.text
@@ -51,7 +56,7 @@ class AddPlaceViewController: UIViewController {
         newItem.coordinateLinked = coordinate
         
         saveContext()
-        dismiss(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     private func saveContext() {

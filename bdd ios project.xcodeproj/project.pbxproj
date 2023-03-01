@@ -17,6 +17,7 @@
 		085BC5F429894FEA0029F2C4 /* PlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085BC5F329894FEA0029F2C4 /* PlaceViewController.swift */; };
 		085BC5F62989643B0029F2C4 /* PlaceCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085BC5F52989643B0029F2C4 /* PlaceCellView.swift */; };
 		085BC5F8298974360029F2C4 /* AddPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085BC5F7298974350029F2C4 /* AddPlaceViewController.swift */; };
+		08B61BF529AE566E0098AC6D /* DetailPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B61BF429AE566E0098AC6D /* DetailPlaceViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		085BC5F329894FEA0029F2C4 /* PlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewController.swift; sourceTree = "<group>"; };
 		085BC5F52989643B0029F2C4 /* PlaceCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCellView.swift; sourceTree = "<group>"; };
 		085BC5F7298974350029F2C4 /* AddPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaceViewController.swift; sourceTree = "<group>"; };
+		08B61BF429AE566E0098AC6D /* DetailPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPlaceViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 				085BC5F329894FEA0029F2C4 /* PlaceViewController.swift */,
 				085BC5F52989643B0029F2C4 /* PlaceCellView.swift */,
 				085BC5F7298974350029F2C4 /* AddPlaceViewController.swift */,
+				08B61BF429AE566E0098AC6D /* DetailPlaceViewController.swift */,
 			);
 			path = "bdd ios project";
 			sourceTree = "<group>";
@@ -151,6 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				085BC5E1298929A70029F2C4 /* CategoriesViewController.swift in Sources */,
+				08B61BF529AE566E0098AC6D /* DetailPlaceViewController.swift in Sources */,
 				085BC5F62989643B0029F2C4 /* PlaceCellView.swift in Sources */,
 				085BC5F8298974360029F2C4 /* AddPlaceViewController.swift in Sources */,
 				085BC5DD298929A70029F2C4 /* AppDelegate.swift in Sources */,
