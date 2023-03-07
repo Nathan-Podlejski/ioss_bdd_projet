@@ -294,6 +294,15 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TF1-8P-n6B">
+                                <rect key="frame" x="153" y="702" width="87" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Modifier"/>
+                                <connections>
+                                    <action selector="modifBtnPressed:" destination="yMq-hJ-xpx" eventType="touchUpInside" id="4i2-cz-1sl"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="2tM-AU-Oph"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -304,6 +313,7 @@
                         <outlet property="coordY" destination="TAz-z6-GEK" id="d8Q-gT-SWg"/>
                         <outlet property="descript" destination="b4w-1G-4Vq" id="AE2-xO-j0F"/>
                         <outlet property="img" destination="rS4-dF-vHm" id="Vwa-vo-P0X"/>
+                        <outlet property="modifBtn" destination="TF1-8P-n6B" id="9Mn-Gf-Ynq"/>
                         <outlet property="name" destination="Et2-zE-AoC" id="3yA-wn-zNu"/>
                     </connections>
                 </viewController>

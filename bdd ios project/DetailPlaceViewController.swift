@@ -14,6 +14,7 @@ class DetailPlaceViewController: UIViewController {
     @IBOutlet weak var coordX: UILabel!
     @IBOutlet weak var coordY: UILabel!
     @IBOutlet weak var descript: UITextView!
+    @IBOutlet weak var modifBtn: UIButton!
     
     public var place: Places?
     
@@ -28,6 +29,21 @@ class DetailPlaceViewController: UIViewController {
         coordY.text = place?.coordinateLinked?.coordY
         descript.text = place?.descripionCity
         
+    }
+    
+    @IBAction func modifBtnPressed(_ sender: Any) {
+        place?.name = name.text
+        place?.coordinateLinked?.coordX = coordX.text
+        place?.coordinateLinked?.coordY = coordY.text
+        place?.descripionCity = descript.text
+        
+        saveContext()
+        
+        navigationController?.popViewController(animated: true)
+    }
+    
+    private func saveContext() {
+        (UIApplication.shared.delegate as! AppDelegate).saveContext()
     }
     
 }

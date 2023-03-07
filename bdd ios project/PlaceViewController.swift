@@ -10,6 +10,44 @@ import CoreData
 
 class PlaceViewController: UITableViewController {
     
+    //ui menu
+    var menuItems: [UIAction] {
+        return [
+            UIAction(title: "Add", image: UIImage(systemName: "add"), handler: { _ in
+                self.performSegue(withIdentifier: "addPlaceSegue", sender: nil)
+            })
+            ,
+            UIAction(title: "Sort by name", image: nil, handler: { (_) in
+                self.sortType = .name
+                self.items = self.fetchItems(searchText: nil)
+                self.tableView.reloadData()
+            }),
+            UIAction(title: "Sort by creation", image: nil, handler: { (_) in
+                self.sortType = .date
+                self.items = self.fetchItems(searchText: nil)
+                self.tableView.reloadData()
+            }),
+            UIAction(title: "Sort by modif", image: nil, handler: { (_) in
+                self.sortType = .dateModif
+                self.items = self.fetchItems(searchText: nil)
+                self.tableView.reloadData()
+            })
+        ]
+    }
+
+    var sortMenu: UIMenu {
+        return UIMenu(title: "", image: nil, identifier: nil, options: [], children: menuItems)
+    }
+    
+    enum sort {
+        case name
+        case date
+        case dateModif
+    }
+    
+    private var sortType: sort = .name
+
+    
     public var category: Category?
     private var items: [Places] = []
     
@@ -21,6 +59,8 @@ class PlaceViewController: UITableViewController {
         super.viewDidLoad()
         
         title = category!.name
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Menu", image: nil, primaryAction: nil, menu: sortMenu)
 
         
         let searchController = UISearchController(searchResultsController: nil)
@@ -42,10 +82,21 @@ class PlaceViewController: UITableViewController {
     private func fetchItems(searchText: String? = nil) -> [Places] {
         let fetchRequest: NSFetchRequest<Places> = Places.fetchRequest()
         
-        let dateSortDescriptor = NSSortDescriptor(keyPath: \Places.creationDate, ascending: false)
-        let titleSortDescriptor = NSSortDescriptor(keyPath: \Places.name, ascending: false)
+        switch sortType {
+        case .name:
+            let titleSortDescriptor = NSSortDescriptor(keyPath: \Places.name, ascending: true)
+            
+            fetchRequest.sortDescriptors = [titleSortDescriptor]
+        case .date:
+            let dateSortDescriptor = NSSortDescriptor(keyPath: \Places.creationDate, ascending: false)
+            
+            fetchRequest.sortDescriptors = [dateSortDescriptor]
+        case .dateModif:
+            let dateSortDescriptor = NSSortDescriptor(keyPath: \Places.modificationDate, ascending: false)
+            
+            fetchRequest.sortDescriptors = [dateSortDescriptor]
+        }
         
-        fetchRequest.sortDescriptors = [dateSortDescriptor, titleSortDescriptor]
 //
         let predicate = NSPredicate(format: "%K = %@",
                                     argumentArray: [ #keyPath(Places.categoryLinked), category!])
@@ -91,13 +142,15 @@ class PlaceViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellPlace", for: indexPath) as! PlaceCellView
         let item = items[indexPath.row]
 
+        cell.img.image = nil
+        
         if(item.image != nil) {
             DispatchQueue.main.async {
                 cell.img.image = UIImage(data: item.image!)
             }
         }
         else {
-            cell.img.image = nil
+            
         }
 
         cell.textLabel?.text = " "
@@ -150,6 +203,5 @@ extension PlaceViewController: UISearchResultsUpdating {
         tableView.reloadData()
     }
     
-
-    
 }
+

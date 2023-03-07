@@ -15,9 +15,69 @@ class ViewController: UITableViewController {
     private var viewContext: NSManagedObjectContext {
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     }
+    
+    //ui menu
+    var menuItems: [UIAction] {
+        return [
+            UIAction(title: "Add", image: UIImage(systemName: "add"), handler: { _ in
+                let alertController = UIAlertController(title: "Nouvelle tâche", message: "Ajouter une tache a la liste", preferredStyle: .alert)
+                
+                alertController.addTextField { textField in
+                    textField.placeholder = "Titre"
+                }
+                
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                let saveAction = UIAlertAction(title: "Ajouter", style: .default) { [unowned self] _ in
+                    guard let textField = alertController.textFields?.first else {
+                        return
+                    }
+                    
+                    self.createItem(name: textField.text!)
+                    self.items = self.fetchItems()
+                    self.tableView.reloadData()
+                }
+                    
+                alertController.addAction(saveAction)
+                alertController.addAction(cancelAction)
+                
+                self.present(alertController, animated: true)
+            })
+            ,
+            UIAction(title: "Sort by name", image: nil, handler: { (_) in
+                self.sortType = .name
+                self.items = self.fetchItems(searchText: nil)
+                self.tableView.reloadData()
+            }),
+            UIAction(title: "Sort by creation", image: nil, handler: { (_) in
+                self.sortType = .date
+                self.items = self.fetchItems(searchText: nil)
+                self.tableView.reloadData()
+            }),
+            UIAction(title: "Sort by modif", image: nil, handler: { (_) in
+                self.sortType = .dateModif
+                self.items = self.fetchItems(searchText: nil)
+                self.tableView.reloadData()
+            })
+        ]
+    }
+    
+
+    var sortMenu: UIMenu {
+        return UIMenu(title: "", image: nil, identifier: nil, options: [], children: menuItems)
+    }
+    
+    enum sort {
+        case name
+        case date
+        case dateModif
+    }
+    
+    private var sortType: sort = .name
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Menu", image: nil, primaryAction: nil, menu: sortMenu)
 
         items = fetchItems()
         
@@ -33,10 +93,21 @@ class ViewController: UITableViewController {
     private func fetchItems(searchText: String? = nil) -> [Category] {
         let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
         
-        let dateSortDescriptor = NSSortDescriptor(keyPath: \Category.creationDate, ascending: false)
-        let titleSortDescriptor = NSSortDescriptor(keyPath: \Category.name, ascending: false)
+        switch sortType {
+        case .name:
+            let titleSortDescriptor = NSSortDescriptor(keyPath: \Category.name, ascending: true)
+            
+            fetchRequest.sortDescriptors = [titleSortDescriptor]
+        case .date:
+            let dateSortDescriptor = NSSortDescriptor(keyPath: \Category.creationDate, ascending: false)
+            
+            fetchRequest.sortDescriptors = [dateSortDescriptor]
+        case .dateModif:
+            let dateSortDescriptor = NSSortDescriptor(keyPath: \Category.modifDate, ascending: false)
+            
+            fetchRequest.sortDescriptors = [dateSortDescriptor]
+        }
         
-        fetchRequest.sortDescriptors = [dateSortDescriptor, titleSortDescriptor]
         
         if let searchText, !searchText.isEmpty {
             let predicate = NSPredicate(format: "%K contains[cd] %@", argumentArray: [#keyPath(Category.name), searchText])
@@ -99,27 +170,7 @@ class ViewController: UITableViewController {
     // MARK : - User Interactions
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
-        let alertController = UIAlertController(title: "Nouvelle tâche", message: "Ajouter une tache a la liste", preferredStyle: .alert)
-        
-        alertController.addTextField { textField in
-            textField.placeholder = "Titre"
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        let saveAction = UIAlertAction(title: "Ajouter", style: .default) { [unowned self] _ in
-            guard let textField = alertController.textFields?.first else {
-                return
-            }
-            
-            self.createItem(name: textField.text!)
-            self.items = self.fetchItems()
-            self.tableView.reloadData()
-        }
-            
-        alertController.addAction(saveAction)
-        alertController.addAction(cancelAction)
-        
-        present(alertController, animated: true)
+
     }
 }
 
